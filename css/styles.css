@@ -122,8 +122,8 @@ transition: transform 0.08s ease, opacity 0.2s ease, background-color 0.2s ease,
 color 0.2s ease;
 }
 .btn:active {
-transform: translateY(1px);
-}
+transform: translateY(1px); /*The active pseudo-class applies a style to an element when it is activated. Commonly used on buttons and links*/
+} /* The combination of :active and transform: translateY(1px) makes the button drop 1px when clicked so it looks like a real button being pressed*/
 .btn-primary {
 background-color: var(--color-accent);
 color: var(--color-text-light);
@@ -161,13 +161,16 @@ gap: 28px;
 align-items: center;
 }
 .hero-text h1 {
-font-size: clamp(28px, 4vw, 44px);
+font-size: clamp(28px, 4vw, 44px); /* The clamp() CSS function limits a value between an upper and lower limit.
+The font size will never go below 28px and never above 44px.
+The ideal size for the text will be 4vw(viewport width) which is 4% of the viewport width */
 line-height: 1.15;
 margin-bottom: 14px;
 }
 .hero-text p {
 color: var(--color-beige);
-max-width: 56ch;
+max-width: 56ch; /* The max-width is set to 56 characters to maintain a readable line length.
+The character height is measured using the 0 "zero" character so 56 zeros wide */
 margin-bottom: 18px;
 }
 .hero-actions {
@@ -254,6 +257,14 @@ max-width: 60ch;
 display: flex;
 gap: 12px;
 flex-wrap: wrap;
+}
+.cta-img {
+width: 100%;
+max-width: 420px;
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+border: 3px solid rgba(255,255,255,0.35);
+object-fit: cover;
 }
 /* ---- Footer ---- */
 .site-footer {
