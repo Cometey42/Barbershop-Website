@@ -66,11 +66,13 @@ const getMonthName = (monthIndex) => {
   ];
   return monthNames[monthIndex];
 };
+
 const formatDateKey = (year, month, day) => {
   const safeMonth = String(month + 1).padStart(2, "0");
   const safeDay = String(day).padStart(2, "0");
   return `${year}-${safeMonth}-${safeDay}`;
 };
+
 const formatReadableDate = (year, month, day) => {
   const date = new Date(year, month, day);
   return date.toLocaleDateString("en-US", {
@@ -80,6 +82,7 @@ const formatReadableDate = (year, month, day) => {
     year: "numeric",
   });
 };
+
 const isPastDate = (year, month, day) => {
   const compareDate = new Date(year, month, day);
   compareDate.setHours(0, 0, 0, 0);
@@ -87,6 +90,7 @@ const isPastDate = (year, month, day) => {
   todayOnly.setHours(0, 0, 0, 0);
   return compareDate < todayOnly;
 };
+
 const isClosedDay = (year, month, day) => {
   const date = new Date(year, month, day);
   const weekday = date.getDay();
@@ -96,6 +100,7 @@ const isClosedDay = (year, month, day) => {
   }
   return false;
 };
+
 const getSlotsForDate = (year, month, day) => {
   const date = new Date(year, month, day);
   const weekday = date.getDay();
@@ -107,6 +112,7 @@ const getSlotsForDate = (year, month, day) => {
   }
   return weekdaySlots;
 };
+
 
 // ----- Render Calendar -----
 const renderCalendar = () => {

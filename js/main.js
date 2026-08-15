@@ -11,6 +11,8 @@ const callBtn = document.getElementById("callBtn");
 const phoneLink = document.getElementById("phoneLink"); // we won't be using an actual phone feature
 const heading = document.getElementById("heroHeading");
 const featureGrid = document.getElementById("featureGrid");
+const nav = document.getElementById("nav");
+const siteHeader = document.querySelector(".site-header");
 
 // ----- Services Data (Array of Objects) -----
 const services = [
@@ -31,23 +33,96 @@ const services = [
   },
 ];
 
+// ----- Navigation Data (Array of Objects) -----
+const navLinks = [
+  { label: "Home", href: "#hero" }, // #'s are a palceholder since we don't have anywhere for these links to go
+  { label: "Services", href: "#features" },
+  { label: "Book", href: "#cta" },
+  { label: "Contact", href: "#footer" },
+];
+
 // ----- Render Features using forEach -----
-const renderFeatures = () => {
-  if (!featureGrid) return; // if the feature grid is not found don't return anything. This errors from crashing the whole site.
-  services.forEach((service) => {
-    const card = document.createElement("article"); // creation of the article element
-    card.classList.add("feature-card"); // adding a class to the article element
-    card.innerHTML = `
- <img src="${service.image}" alt="${service.title}" class="feature-img"
-/>
- <h3 class="feature-title">${service.title}</h3>
- <p class="feature-text">${service.text}</p>
+// const renderFeatures = () => {
+//   if (!featureGrid) return; // if the feature grid is not found don't return anything. This errors from crashing the whole site.
+//   services.forEach((service) => {
+//     const card = document.createElement("article"); // creation of the article element
+//     card.classList.add("feature-card"); // adding a class to the article element
+//     card.innerHTML = `
+//  <img src="${service.image}" alt="${service.title}" class="feature-img"
+// />
+//  <h3 class="feature-title">${service.title}</h3>
+//  <p class="feature-text">${service.text}</p>
+//  `; // innerHTML kinda acts like a script tag in HTML. It creates a space where HTML can be written in ajs file
+//     featureGrid.appendChild(card); // in this example appendChild() adds the article element we created to the bottom of the list of elements in the div whose id is featureGrid
+//   });
+// };
+
+// Breakdown:
+// array.forEach(item => {
+  // create element (createElement())
+  // insert data (innerHTML)
+  // add to page (appendChild())
+  // }); 
+
+// ----- Render Features using map() -----
+const renderFeaturesMap = () => {
+  const cardsHTML = services.map((service) => {
+      return `
+    <article class="feature-card">
+    <img src="${service.image}" alt="${service.title}" class="feature-img" />
+    <h3 class="feature-title">${service.title}</h3>
+    <p class="feature-text">${service.text}</p>
+    </article>
+    `;
+    }).join(""); // takes the items of an array and puts them into a string separated by "" in this example
+
+  featureGrid.innerHTML = cardsHTML; // The new array cardsHTML will hold the cards
+}; // innerHTML removes the quotation marks and add the elements into the div with the featureGrid id
+
+// ----- Render Navigation using map() -----
+const renderNavigation = () => {
+  // Desktop Navigation links
+  if (nav) {
+    const navHTML = navLinks.map((link) => {
+        return `
+  <a href="${link.href}" class="nav-link">${link.label}</a>
  `;
-    featureGrid.appendChild(card); // in this example appendChild() adds the article element we created to the bottom of the list of elements in the div whose id is featureGrid
-  });
+      }).join("");
+
+    nav.innerHTML = navHTML;
+  }
+
+  // Mobile Navigation links
+  if (mobileMenu) {
+    const mobileHTML = navLinks.map((link) => {
+        return `
+ <a href="${link.href}" class="mobile-link">${link.label}</a>
+ `;
+      }).join("");
+
+    mobileMenu.innerHTML = mobileHTML;
+  }
 };
+// What we just learned
+// Skills               Concept
+//          
+// Object Arrays    Data Structure
+// map()            Transforms Data
+// Template Literals  Dynamic HTML
+// DOM Rendering      UI Generation
+
 
 // ----- Helpers / Functions -----
+
+const handleHeaderOnScroll = () => {
+  if (!siteHeader) return; // guard clause
+  if (window.scrollY > 10) {
+    siteHeader.classList.add("is-scrolled"); // classList adds/removes a class from an element via a variable like siteHeader, featureGrid, etc...
+  } else {
+    siteHeader.classList.remove("is-scrolled");
+  }
+};
+
 // Update footer year automatically
 const setCurrentYear = () => {
   const now = new Date();
@@ -126,4 +201,11 @@ if (callBtn) {
   });
 }
 
-renderFeatures();
+// 6) Changes header behavior on scroll
+window.addEventListener("scroll", handleHeaderOnScroll);
+
+// Function calls
+// renderFeatures();
+renderFeaturesMap();
+renderNavigation();
+handleHeaderOnScroll(); // runs once on page load in case the user refreshes mid scroll
