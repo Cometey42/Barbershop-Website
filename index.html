@@ -6,16 +6,20 @@
     <title>Vintage Barbershop</title>
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/calendar.css" />
   </head>
   <body>
-    
     <!-- ===== Header / Navbar ===== -->
     <header class="site-header">
       <div class="container header-inner">
-        <a href="#" class="logo" id="logo"><img src="assets/images/logo.png" alt="logo" class="logo-img">Vintage Barbershop</a>
-        <nav class="nav" id="nav">
-
-        </nav>
+        <a href="#" class="logo" id="logo"
+          ><img
+            src="assets/images/logo.png"
+            alt="logo"
+            class="logo-img"
+          />Vintage Barbershop</a
+        >
+        <nav class="nav" id="nav"></nav>
 
         <!-- Mobile Menu Button (for later JS) -->
         <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
@@ -23,7 +27,6 @@
 
       <!-- Mobile Menu Panel (for later JS) -->
       <div class="mobile-menu" id="mobileMenu">
-
         <!--these <a> tags will be the nav links for the mobile menu navbar based on screen size. The JS will cause the class(mobile-menu) we have for mobile screens to take over styling -->
       </div>
     </header>
@@ -64,10 +67,7 @@
         <p class="section-subtitle" id="featuresSubtitle">
           Quality grooming services designed for comfort, style, and confidence.
         </p>
-        <div class="feature-grid" id="featureGrid">
-
-
-        </div>
+        <div class="feature-grid" id="featureGrid"></div>
       </div>
     </section>
 
@@ -89,6 +89,62 @@
       <!-- Optional CTA Image (replace with your own asset) -->
       <!-- <img src="assets/images/cta.jpg" alt="CTA background" class="cta-img"
 /> -->
+
+    <!-- ===== Calendar Section ===== -->
+      <div class="container booking-layout">
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <button class="calendar-nav-btn" id="prevMonthBtn">←</button>
+            <h3 id="calendarMonthLabel">Month Year</h3>
+            <button class="calendar-nav-btn" id="nextMonthBtn">→</button>
+          </div>
+          <div class="calendar-weekdays">
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span> 
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+        <div class="booking-panel">
+          <h3 class="booking-panel-title">Book Your Appointment</h3>
+          <p class="selected-date-text">
+            Selected Date:
+            <span id="selectedDateText">Choose a date</span>
+          </p>
+          <div class="time-slots" id="timeSlots"></div>
+          <form id="bookingForm" class="booking-form">
+            <div class="form-group">
+              <label for="customerName">Name</label>
+              <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your name"
+              />
+            </div>
+            <div class="form-group">
+              <label for="customerService">Service</label>
+              <select id="customerService">
+                <option value="">Choose a service</option>
+                <option value="Classic Haircut">Classic Haircut</option>
+                <option value="Beard Trim">Beard Trim</option>
+                <option value="Straight Razor Shave">
+                  Straight Razor Shave
+                </option>
+                <option value="Fade & Style">Fade & Style</option>
+              </select>
+            </div>
+            <input type="hidden" id="selectedTimeInput" />
+            <button type="submit" class="btn btn-primary booking-submit-btn">
+              Confirm Booking
+            </button>
+            <p id="bookingMessage" class="booking-message"></p>
+          </form>
+        </div>
+      </div>
     </section>
 
     <!-- ===== Footer Section ===== -->
@@ -133,8 +189,32 @@
       </div>
     </footer>
 
+    <!-- ===== Service Details Modal ===== -->
+    <div class="service-modal" id="serviceModal" aria-hidden="true">
+      <div class="service-modal-overlay" id="serviceModalOverlay"></div>
+      <div
+        class="service-modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="serviceModalTitle"
+      >
+        <button
+          class="service-modal-close"
+          id="serviceModalClose"
+          aria-label="Close modal"
+        >
+          x
+        </button>
+        <h3 id="serviceModalTitle">Service Details</h3>
+        <p id="serviceModalPrice" class="service-modal-price"></p>
+        <ul id="serviceModalList" class="service-modal-list"></ul>
+      </div>
+    </div>
+
     <!-- JS -->
-    <script src="js/main.js"></script> <!--The script tag is placed at the bottom of the screen so all the elements 
+    <script src="js/main.js"></script>
+    <!--The script tag is placed at the bottom of the screen so all the elements 
     and id's that will be used in the functions are read by the browser's engine so the JS can run immediately-->
+    <script src="js/calendar.js"></script>
   </body>
 </html>
