@@ -15,6 +15,7 @@ const nav = document.getElementById("nav");
 const siteHeader = document.querySelector(".site-header");
 const heroSubtext = document.getElementById("heroSubtext");
 const ctaText = document.getElementById("ctaText");
+const hoursList = document.getElementById("hoursList");
 
 // ----- Modal Elements -----
 const serviceModal = document.getElementById("serviceModal");
@@ -29,7 +30,7 @@ const services = [
   {
     id: 1,
     title: "Classic Haircut",
-    image: "assets/images/feature-1.jpg",
+    image: "assets/images/feature-7.jpg",
     alt: "Classic haircut",
     description: "Timeless cuts with modern precision—tailored to your style.",
     price: 25,
@@ -93,7 +94,7 @@ const services = [
   {
     id: 5,
     title: "Kids Cut",
-    image: "assets/images/feature-1.jpg",
+    image: "assets/images/feature-5.jpg",
     alt: "Kids haircut",
     description: "Clean, comfortable haircut service for younger clients.",
     price: 20,
@@ -109,7 +110,7 @@ const services = [
   {
     id: 6,
     title: "Head Shave",
-    image: "assets/images/feature-3.jpg",
+    image: "assets/images/feature-6.jpg",
     alt: "Head shave",
     description: "Smooth head shave with classic barbershop treatment.",
     price: 28,
@@ -132,8 +133,29 @@ const navLinks = [
   { label: "Contact", href: "#footer" },
 ];
 
+// ----- Main Shop Object -----
+const shopInfo = {
+  name: "Vintage Barbershop",
+  address: "123 Main St, Your City",
+  phoneDisplay: "(555) 123-4567",
+  phoneRaw: "5551234567",
+  email: "hello@vintagebarbershop.com",
+};
+
+// ----- Hours Data -----
+const businessHours = [
+  { day: "Monday", open: 9, close: 19 },
+  { day: "Tuesday", open: 9, close: 19 },
+  { day: "Wednesday", open: 9, close: 19 },
+  { day: "Thursday", open: 9, close: 19 },
+  { day: "Friday", open: 9, close: 19 },
+  { day: "Saturday", open: 10, close: 17 },
+  { day: "Sunday", open: 0, close: 0 },
+];
+
 // ----- Helpers / Functions -----
 
+// Changes Header shape on scroll
 const handleHeaderOnScroll = () => {
   if (!siteHeader) return; // guard clause
   if (window.scrollY > 10) {
@@ -147,6 +169,14 @@ const handleHeaderOnScroll = () => {
 const setCurrentYear = () => {
   const now = new Date();
   yearEl.textContent = now.getFullYear();
+};
+
+// Display Hours
+const formatHour = (hour) => {
+  if (hour === 0) return "Closed"; // safety net. Never seen by user
+  if (hour === 12) return "12pm";
+  if (hour > 12) return `${hour - 12}pm`;
+  return `${hour}am`;
 };
 
 // Toggle mobile menu open/close
@@ -191,14 +221,15 @@ const openServiceModal = (serviceId) => {
     !serviceModalList
   )
     return;
+
+     // find() iterates through the array and grabs the first matching object in this case it's based on the service.id number
   const selectedService = services.find(
-    (service) => service.id === Number(serviceId),
+    (service) => service.id === Number(serviceId),// Number() takes the string that is returned from the serviceId(line 410) and converts it back to a number
   );
   if (!selectedService) return;
   serviceModalTitle.textContent = selectedService.title;
   serviceModalPrice.textContent = `$${selectedService.price}`;
-  serviceModalList.innerHTML = selectedService.details
-    .map((detail) => `<li>${detail}</li>`)
+  serviceModalList.innerHTML = selectedService.details.map((detail) => `<li>${detail}</li>`)
     .join("");
   serviceModal.classList.add("is-open");
   serviceModal.setAttribute("aria-hidden", "false");
@@ -212,13 +243,11 @@ const closeServiceModal = () => {
 };
 
 // ----- Render Functions -----
-
 // ----- Render Navigation using map() -----
 const renderNavigation = () => {
   // Desktop Navigation links
   if (nav) {
-    const navHTML = navLinks
-      .map((link) => {
+    const navHTML = navLinks.map((link) => {
         return `
   <a href="${link.href}" class="nav-link">${link.label}</a>
  `;
@@ -241,11 +270,8 @@ const renderNavigation = () => {
 
 const renderServices = () => {
   if (!featureGrid) return;
-  const servicesHTML = services
-    .map((service) => {
-      const badgeHTML = service.popular
-        ? `<p class="service-badge">Popular Choice</p>`
-        : `<p class="service-badge alt-badge">Barber Favorite</p>`;
+  const servicesHTML = services.map((service) => {
+      const badgeHTML = service.popular ? `<p class="service-badge">Popular Choice</p>`: `<p class="service-badge alt-badge">Barber Favorite</p>`;
       return `
 <article class="feature-card">
 <img
@@ -273,18 +299,20 @@ View Details
   featureGrid.innerHTML = servicesHTML;
 };
 
+// Renders Business Hours
 const renderHours = () => {
   if (!hoursList) return;
-  hoursList.innerHTML = businessHours
-    .map((item) => {
+  hoursList.innerHTML = businessHours.map((item) => {
       if (item.open === 0 && item.close === 0) {
         return `<li>${item.day}: Closed</li>`;
       }
-      return `<li>${item.day}: ${formatHour(item.open)} –
+      return `<li>${item.day}: ${formatHour(item.open)} -
 ${formatHour(item.close)}</li>`;
     })
     .join("");
 };
+
+
 const renderContactInfo = () => {
   if (phoneLink) {
     phoneLink.textContent = shopInfo.phoneDisplay;
@@ -305,13 +333,13 @@ const checkIfOpen = () => {
   const now = new Date();
   const currentDay = now.getDay();
   const currentHour = now.getHours();
-  let schedule;
-  if (currentDay === 0) {
-    schedule = businessHours[6];
+  let schedule; // we can't initialize it in the declaration itself since there's no single expression that covers both branches without repeating the conditional. Schedules's value comes as a result of a condition so we didn't give it a value to begin with
+  if (currentDay === 0) { 
+    schedule = businessHours[6]; // business hours array lists sunday as the 6th index
   } else {
-    schedule = businessHours[currentDay - 1];
+    schedule = businessHours[currentDay - 1]; // currentDay comes from the now.getDay() which shows monday as 1 but it needs to be shifted to 0 for human understanding
   }
-  if (schedule.open === 0 && schedule.close === 0) {
+  if (schedule.open === 0 && schedule.close === 0) { // .open comes from the businessHours array
     updateSubtext("We are closed today. Book now for your next sharp look.");
     return;
   }
@@ -370,7 +398,30 @@ if (callBtn) {
   });
 }
 
-// 6) Changes header behavior on scroll
+// 6) Modals Button open and close
+if (featureGrid) {
+  featureGrid.addEventListener("click", (event) => { // since featureGrid is the target for the listener we specify with .closest(".service-details-btn") so only clicking the btn with the class in the parentheses of closest() will trigger the modal to open
+    const clickedButton = event.target.closest(".service-details-btn");
+    if (!clickedButton) return;
+    const serviceId = clickedButton.dataset.serviceId; // All dataset values are strings, no matter what's in the HTML 
+    openServiceModal(serviceId);
+  }); // dataset is a built in property every DOM element has, .dataset accesses the attributes of an element
+}
+
+if (serviceModalClose) {
+  serviceModalClose.addEventListener("click", closeServiceModal);
+} // listens for a click on the btn with the serviceModal id to close the modal
+
+if (serviceModalOverlay) {
+  serviceModalOverlay.addEventListener("click", closeServiceModal); // clicking anywhere outside of the modal will call the closeServiceModal() function. Because the css stretches the overlay across the entire screen. See the service-modal class notes
+}
+document.addEventListener("keydown", (event) => { // keydown is also triggered by esc on keyboard
+  if (event.key === "Escape") { // specifying that the only key(outside of a click) to close the modal is the esc key on keyboard
+    closeServiceModal();
+  }
+});
+
+// 7) Changes header behavior on scroll
 window.addEventListener("scroll", handleHeaderOnScroll);
 
 // Function calls
@@ -379,3 +430,6 @@ window.addEventListener("scroll", handleHeaderOnScroll);
 renderNavigation();
 handleHeaderOnScroll(); // runs once on page load in case the user refreshes mid scroll
 renderServices();
+renderHours();
+renderContactInfo();
+checkIfOpen();

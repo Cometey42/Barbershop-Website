@@ -266,20 +266,20 @@ The character height is measured using the 0 "zero" character so 56 zeros wide *
 
 /* ===== Service Modal ===== */
 .service-modal {
-  position: fixed;
-  inset: 0;
+  position: fixed; /* has the fixed class for two reasons. To allow position: absolute to the service-modal-overlay class. And anchors the element to the viewport*/
+  inset: 0; /* makes the service modal stretch across the whole screen*/
   display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  z-index: 999;
+  z-index: 999; /* makes the element the closest element to the screen so nothing can cover it */
 }
 .service-modal.is-open {
   display: flex;
 }
 .service-modal-overlay {
-  position: absolute;
-  inset: 0;
+  position: absolute; /* combined with absolute position it fills the element's nearest positioned ancestor(service-modal) comepletely */
+  inset: 0; /* sets the top, btm, left and right offsets to zero. Stretching the element across the viewport */
   background-color: rgba(0, 0, 0, 0.58);
 }
 .service-modal-content {

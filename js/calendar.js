@@ -102,7 +102,7 @@ const isClosedDay = (year, month, day) => { // used to add the disabled class to
   return false;
 };
 
-const getSlotsForDate = (year, month, day) => {
+const getSlotsForDate = (year, month, day) => { // shows availability hours
   const date = new Date(year, month, day); // gets current year, month and day when this function is called
   const weekday = date.getDay(); // assigns weekday the value of the current day
   if (weekday === 6) { // 0-sun, 1-mon, 2-tue, ... 6-sat
@@ -126,22 +126,23 @@ const renderCalendar = () => {
   calendarGrid.innerHTML = "";
 
   // Figuring out the grid shape
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // not 0-indexed. ..currentMonth, 1 starts on the first day of the month
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 0 gives us the last day of the current month so it knows how many day button to fill the calendar grid with
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // ..currentMonth, 1 returns the first day of the selected month. getDay() asks what day of the week is that? Returns a number between 0 - 6
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 0 in this line = "give me one day before next month's 1st, so I get this month's last day. returns the number of days in that month
 
   // Padding with empty cells
-  for (let i = 0; i < firstDayOfMonth; i++) { 
-    const emptyCell = document.createElement("div");
-    emptyCell.className = "calendar-empty";
-    calendarGrid.appendChild(emptyCell);
+  for (let i = 0; i < firstDayOfMonth; i++) { // starts at the first day of the month and the stop condition is the last day of the month
+    const emptyCell = document.createElement("div"); // creates a div for each cell in the calendar for each day of the month
+    emptyCell.className = "calendar-empty"; // adds the class calendar-empty to each cell
+    calendarGrid.appendChild(emptyCell); // adds the cell to the calendar-grid
   }
 
   // Building each day button
   for (let day = 1; day <= daysInMonth; day++) {
-    const dayButton = document.createElement("button");
-    dayButton.textContent = day;
+    const dayButton = document.createElement("button"); // appendChild() for these buttons is at the end of this loop
+    dayButton.textContent = day; // day of the month as a number
     dayButton.className = "calendar-day";
-    const dateKey = formatDateKey(currentYear, currentMonth, day);
+    const dateKey = formatDateKey(currentYear, currentMonth, day); // adds 1 to convert it to human-style 1–12 before formatting, then zero-pads month and day to 2 digits, producing something like "2026-08-18"
+    // dateKey is used further down to make checking for availability built inito each button
 
     // Conditionally adding classes (styling hooks based on state)
     if (
@@ -149,7 +150,7 @@ const renderCalendar = () => {
       currentMonth === today.getMonth() &&
       currentYear === today.getFullYear()
     ) {
-      dayButton.classList.add("today"); // gives the button a beige outline
+      dayButton.classList.add("today"); // gives the current day button a beige outline
     }
 
     if (
@@ -170,14 +171,14 @@ const renderCalendar = () => {
 
     // The click handler (a closure)
     dayButton.addEventListener("click", () => {
-      if (isPastDate(currentYear, currentMonth, day)) return;
-      if (isClosedDay(currentYear, currentMonth, day)) return;
-      selectedDate = {
-        year: currentYear,
-        month: currentMonth,
-        day: day,
-        key: dateKey,
-      };
+      if (isPastDate(currentYear, currentMonth, day)) return; // extra insurance, past dates are already disabled
+      if (isClosedDay(currentYear, currentMonth, day)) return; // extra insurance, sundays are already disabled
+      selectedDate = { // fills in the key/value pairs based on date selected by user
+        year: currentYear, // 2026
+        month: currentMonth, // August
+        day: day, // 18
+        key: dateKey, // "2026-08-18" format as a string
+      }; // this object is used to store the appointments and prevent double-booking(lines 280-290)
       selectedTime = "";
       selectedTimeInput.value = "";
       selectedDateText.textContent = formatReadableDate( // 0-indexed
@@ -185,34 +186,35 @@ const renderCalendar = () => {
         currentMonth,
         day,
       );
-      renderCalendar();
-      renderTimeSlots();
+      renderCalendar(); // recalling this function after the listeners are added to each button
+      renderTimeSlots(); // recalling this function to render the timeSlots
       bookingMessage.textContent = "";
       bookingMessage.className = "booking-message";
     });
-    calendarGrid.appendChild(dayButton);
+    calendarGrid.appendChild(dayButton); // where all buttons are added to the calendar grid
   }
 };
 
 // ----- Render Time Slots -----
-const renderTimeSlots = () => { // catches if the date wasn't selected first, forces date selection before timeslot
+const renderTimeSlots = () => { // fills in the time-slot buttons for whatever date the user picked
   if (!timeSlots) return;
   timeSlots.innerHTML = "";
-  if (!selectedDate) {
+  if (!selectedDate) { // catches if the date wasn't selected first, forces date selection before timeslot
     timeSlots.innerHTML = `<p class="selected-date-text">Choose a date first.</p>`;
     return;
   }
-  const slots = getSlotsForDate(
+  const slots = getSlotsForDate( // passes available hours for the day against date selected by user
     selectedDate.year,
     selectedDate.month,
     selectedDate.day,
   );
-  const bookedForDay = bookedAppointments[selectedDate.key] || [];
+  const bookedForDay = bookedAppointments[selectedDate.key] || []; // looks up what times are already booked for this specific date. Returns undefined if nothing's been booked yet. Undefined is falsy and we can't return undefined becuase the .includes() we use with this slot later in the code would crash so we us the || operator to substitute for an empty array []; instead.
+  // checks if there are previous bookings for the selected date and if not, returns an empty array
   if (slots.length === 0) {
     timeSlots.innerHTML = `<p class="selected-date-text">No appointments available for 
-this date.</p>`;
-    return;
-  }
+this date.</p>`; // a redundancy just in case the CSS class(disabled) or JS Guards gets loosened later by another dev(real-world thinking)
+    return; // shows a "no appointments available" message and exits early, skipping the loop that would try to render time slot buttons
+  } // important distinction slots = shop's hours that day(empty on Sundays), bookedForDay = which of those hours are already taken(used later to disable specific buttons for time slots already booked). both return arrays with hours as strings but they are for different reasons
   for (let i = 0; i < slots.length; i++) {
     const slot = slots[i];
     const slotBtn = document.createElement("button");
@@ -239,16 +241,16 @@ this date.</p>`;
 // ----- Month Navigation -----
 if (prevMonthBtn) {
   prevMonthBtn.addEventListener("click", () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
+    currentMonth--; // decrements the month by 1 on click
+    if (currentMonth < 0) { // handles year boundary
+      currentMonth = 11; // if month is jan(0) and is decremented it doesn't go to -1 but 11(dec)
+      currentYear--; // decrements the year by 1
     }
-    renderCalendar();
+    renderCalendar(); // re-runs renderCalendar() the function from earlier that builds the whole grid
   });
 }
 if (nextMonthBtn) {
-  nextMonthBtn.addEventListener("click", () => {
+  nextMonthBtn.addEventListener("click", () => { // same but increments to the next year
     currentMonth++;
     if (currentMonth > 11) {
       currentMonth = 0;
@@ -261,8 +263,8 @@ if (nextMonthBtn) {
 // ----- Booking Submit -----
 if (bookingForm) {
   bookingForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const nameValue = customerName.value.trim();
+    event.preventDefault(); // prevents default behaviors for all events
+    const nameValue = customerName.value.trim(); // trim() stripes whitespace around a string , e.g. " Tyler " becomes "Tyler" prevents copy and paste spaces from being included as part of their name
     const serviceValue = customerService.value;
     const timeValue = selectedTimeInput.value;
     if (
@@ -276,8 +278,8 @@ if (bookingForm) {
       bookingMessage.className = "booking-message error";
       return;
     }
-    if (!bookedAppointments[selectedDate.key]) {
-      bookedAppointments[selectedDate.key] = [];
+    if (!bookedAppointments[selectedDate.key]) { // reads as "if there's no array yet for this date..."
+      bookedAppointments[selectedDate.key] = []; // ...then create one
     }
     if (bookedAppointments[selectedDate.key].includes(timeValue)) {
       bookingMessage.textContent =
@@ -286,7 +288,7 @@ if (bookingForm) {
       renderTimeSlots();
       return;
     }
-    bookedAppointments[selectedDate.key].push(timeValue);
+    bookedAppointments[selectedDate.key].push(timeValue); // push() adds the time selected to the end of the booked appoinments array
     bookingMessage.textContent = `${nameValue}, your ${serviceValue} appointment is 
 booked for ${formatReadableDate(
       selectedDate.year,
