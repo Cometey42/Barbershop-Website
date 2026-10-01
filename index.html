@@ -5,26 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vintage Barbershop</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/calendar.css" />
   </head>
   <body>
     <!-- ===== Header / Navbar ===== -->
     <header class="site-header">
       <div class="container header-inner">
         <a href="#" class="logo" id="logo">Vintage Barbershop</a>
-        <nav class="nav" id="nav">
-          <a href="#features" class="nav-link">Services</a>
-          <a href="#cta" class="nav-link">Book</a>
-          <a href="#footer" class="nav-link">Contact</a>
-        </nav>
+        <nav class="nav" id="nav"></nav>
         <!-- Mobile Menu Button (for later JS) -->
         <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
       </div>
       <!-- Mobile Menu Panel (for later JS) -->
-      <div class="mobile-menu" id="mobileMenu">
-        <a href="#features" class="mobile-link">Services</a>
-        <a href="#cta" class="mobile-link">Book</a>
-        <a href="#footer" class="mobile-link">Contact</a>
-      </div>
+      <div class="mobile-menu" id="mobileMenu"></div>
     </header>
     <!-- ===== Hero Section ===== -->
     <section class="hero" id="hero">
@@ -62,44 +55,7 @@
         <p class="section-subtitle" id="featuresSubtitle">
           Quality grooming services designed for comfort, style, and confidence.
         </p>
-        <div class="feature-grid" id="featureGrid">
-          <!-- Feature Card 1 -->
-          <article class="feature-card">
-            <img
-              src="assets/images/feature-1.jpg"
-              alt="Classic haircut"
-              class="feature-img"
-            />
-            <h3 class="feature-title">Classic Haircut</h3>
-            <p class="feature-text">
-              Timeless cuts with modern precision—tailored to your style.
-            </p>
-          </article>
-          <!-- Feature Card 2 -->
-          <article class="feature-card">
-            <img
-              src="assets/images/feature-2.jpg"
-              alt="Beard trim"
-              class="feature-img"
-            />
-            <h3 class="feature-title">Beard Trim</h3>
-            <p class="feature-text">
-              Shape, line-up, and refine your beard for a clean finish.
-            </p>
-          </article>
-          <!-- Feature Card 3 -->
-          <article class="feature-card">
-            <img
-              src="assets/images/feature-3.jpg"
-              alt="Straight razor shave"
-              class="feature-img"
-            />
-            <h3 class="feature-title">Straight Razor Shave</h3>
-            <p class="feature-text">
-              Hot towel, smooth shave, and classic barbershop experience.
-            </p>
-          </article>
-        </div>
+        <div class="feature-grid" id="featureGrid"></div>
       </div>
     </section>
     <!-- ===== Call To Action Section ===== -->
@@ -115,6 +71,70 @@
         <div class="cta-actions">
           <button class="btn btn-primary" id="ctaBtn">Book Now</button>
           <button class="btn btn-secondary" id="callBtn">Call Us</button>
+        </div>
+      </div>
+      <div class="container booking-layout">
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <button class="calendar-nav-btn" id="prevMonthBtn">←</button>
+            <h3 id="calendarMonthLabel">Month Year</h3>
+            <button class="calendar-nav-btn" id="nextMonthBtn">→</button>
+          </div>
+
+          <div class="calendar-weekdays">
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+          </div>
+
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <div class="booking-panel">
+          <h3 class="booking-panel-title">Book Your Appointment</h3>
+
+          <p class="selected-date-text">
+            Selected Date:
+            <span id="selectedDateText">Choose a date</span>
+          </p>
+
+          <div class="time-slots" id="timeSlots"></div>
+
+          <form id="bookingForm" class="booking-form">
+            <div class="form-group">
+              <label for="customerName">Name</label>
+              <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="customerService">Service</label>
+              <select id="customerService">
+                <option value="">Choose a service</option>
+                <option value="Classic Haircut">Classic Haircut</option>
+                <option value="Beard Trim">Beard Trim</option>
+                <option value="Straight Razor Shave">
+                  Straight Razor Shave
+                </option>
+                <option value="Fade & Style">Fade & Style</option>
+              </select>
+            </div>
+
+            <input type="hidden" id="selectedTimeInput" />
+
+            <button type="submit" class="btn btn-primary booking-submit-btn">
+              Confirm Booking
+            </button>
+
+            <p id="bookingMessage" class="booking-message"></p>
+          </form>
         </div>
       </div>
     </section>
@@ -158,7 +178,27 @@
         </p>
       </div>
     </footer>
+    <!-- ===== Service Details Modal ===== -->
+    <div class="service-modal" id="serviceModal" aria-hidden="true">
+      <div class="service-modal-overlay" id="serviceModalOverlay"></div>
+      <div
+        class="service-modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="serviceModalTitle">
+        <button
+          class="service-modal-close"
+          id="serviceModalClose"
+          aria-label="Closemodal">
+          ×
+        </button>
+        <h3 id="serviceModalTitle">Service Details</h3>
+        <p id="serviceModalPrice" class="service-modal-price"></p>
+        <ul id="serviceModalList" class="service-modal-list"></ul>
+      </div>
+    </div>
     <!-- JS -->
     <script src="js/main.js"></script>
+    <script src="js/calendar.js"></script>
   </body>
 </html>
