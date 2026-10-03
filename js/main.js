@@ -13,8 +13,7 @@ const heading = document.getElementById("heroHeading");
 const featureGrid = document.getElementById("featureGrid");
 const nav = document.getElementById("nav");
 const siteHeader = document.querySelector(".site-header");
-const heroSubtext = document.getElementById("heroSubtext");
-const ctaText = document.getElementById("ctaText");
+
 // ----- Modal Elements -----
 const serviceModal = document.getElementById("serviceModal");
 const serviceModalOverlay = document.getElementById("serviceModalOverlay");
@@ -349,14 +348,15 @@ const renderNavigation = () => {
 };
 const renderServices = () => {
   if (!featureGrid) return;
-  const servicesHTML = services
-    .map((service) => {
+  const servicesHTML = services.map((service) => {
       let badgeHTML = "";
+      
       if (service.popular) {
         badgeHTML = `<p class="service-badge">Popular Choice</p>`;
       } else {
         badgeHTML = `<p class="service-badge alt-badge">Barber Favorite</p>`;
       }
+      
       return `
 <article class="feature-card">
 <img
