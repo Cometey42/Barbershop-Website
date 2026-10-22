@@ -13,13 +13,13 @@ const heading = document.getElementById("heroHeading");
 // ----- Helpers / Functions -----
 // Update footer year automatically
 const setCurrentYear = () => {
-const now = new Date();
+const now = new Date(); // stores in the variable now the year/month/day/hour/minute/second/milisecond from when the function was called
 yearEl.textContent = now.getFullYear();
 };
 // Toggle mobile menu open/close
 let isMenuOpen = false;
 const toggleMobileMenu = () => {
-if (!mobileMenu) return;
+if (!mobileMenu) return; // stop clause; if mobileMenu doesn't exist return nothing
 if (isMenuOpen === false) {
 mobileMenu.classList.add("is-open");
 isMenuOpen = true;
@@ -30,7 +30,7 @@ isMenuOpen = false;
 };
 // Close mobile menu (used when a link is clicked)
 const closeMobileMenu = () => {
-if (!mobileMenu) return;
+if (!mobileMenu) return; // if the mobileMenu doesn't exist, return nothing;
 mobileMenu.classList.remove("is-open");
 isMenuOpen = false;
 };
@@ -39,6 +39,7 @@ const updateHeadingText = (newText) => {
 if (!heading) return;
 heading.textContent = newText;
 };
+
 // ----- Event Listeners -----
 // 1) Set year on page load
 setCurrentYear();
@@ -52,7 +53,7 @@ toggleMobileMenu();
 if (mobileMenu) {
 mobileMenu.addEventListener("click", (event) => {
 // If they clicked an <a> inside the menu, close it
-if (event.target.tagName === "A") {
+if (event.target.tagName === "A") { // event.target.tagName returns "A" so the other side of the === must be "A"
 closeMobileMenu();
 }
 });

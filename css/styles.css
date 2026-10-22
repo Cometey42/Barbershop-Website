@@ -56,6 +56,16 @@ color: var(--color-text-light);
 text-decoration: none;
 font-weight: 800;
 letter-spacing: 0.5px;
+display: flex;
+gap: 10px;
+align-items: center;
+}
+.logo img {
+height: 65px; /* Set a fixed height for the logo */
+width: auto;
+max-width: 120px;  /* Prevent logo from being too large on wider screens */
+object-fit: contain;
+
 }
 .nav {
 display: flex;
