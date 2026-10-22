@@ -53,7 +53,7 @@ toggleMobileMenu();
 if (mobileMenu) {
 mobileMenu.addEventListener("click", (event) => {
 // If they clicked an <a> inside the menu, close it
-if (event.target.tagName === "A") {
+if (event.target.tagName === "A") { // event.target.tagName returns "A" so the other side of the === must be "A"
 closeMobileMenu();
 }
 });
