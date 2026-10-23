@@ -11,6 +11,7 @@ const callBtn = document.getElementById("callBtn");
 const phoneLink = document.getElementById("phoneLink");
 const heading = document.getElementById("heroHeading");
 const featureGrid = document.getElementById("featureGrid");
+const nav = document.getElementById("nav");
 // ----- Services Data (Array of Objects) -----
 const services = [
  {
@@ -28,6 +29,13 @@ const services = [
  text: "Hot towel treatment with a smooth traditional shave.",
  image: "assets/images/feature-3.jpg"
  }
+];
+// ----- Navigation Data (Array of Objects) -----
+const navLinks = [
+{ label: "Home", href: "#hero" },
+{ label: "Services", href: "#features" },
+{ label: "Book", href: "#cta" },
+{ label: "Contact", href: "#footer" }
 ];
 // ----- Helpers / Functions -----
 // Update footer year automatically
@@ -97,19 +105,55 @@ updateHeadingText("Call feature coming next!");
 }
 
 // ----- Render Features using forEach -----
-const renderFeatures = () => {
-if (!featureGrid) return;
-services.forEach(service => {
- const card = document.createElement("article");
- card.classList.add("feature-card"); // innerHTML allows us to read or change anything inside of an element it has access to
- card.innerHTML = ` 
- <img src="${service.image}" alt="${service.title}" class="feature-img"/>
- <h3 class="feature-title">${service.title}</h3>
- <p class="feature-text">${service.text}</p>
- `; // template literals uses the `${}` and allows us to structure how we want our data returned
- featureGrid.appendChild(card);
-});
+// const renderFeatures = () => {
+// if (!featureGrid) return;
+// services.forEach(service => {
+//  const card = document.createElement("article"); // creates an articel tag and stores it inside the variable card
+//  card.classList.add("feature-card"); // classList allows us to modify the classes an element has. The add() adds the class to the element
+//  card.innerHTML = ` 
+//  <img src="${service.image}" alt="${service.title}" class="feature-img"/>
+//  <h3 class="feature-title">${service.title}</h3>
+//  <p class="feature-text">${service.text}</p>
+// `; // innerHTML allows us to read or change anything inside of an element it has access to 
+//  // template literals uses the `${}` and allows us to structure how we want our data returned
+//  featureGrid.appendChild(card);
+// });
+// };
+
+const renderFeaturesMap = () => {
+    const cardsHTML = services.map(service => {
+        return `
+        <article class="feature-card">
+        <img src="${service.image}" alt="${service.title}" class="feature-img" />
+        <h3 class="feature-title">${service.title}</h3>
+        <p class="feature-text">${service.text}</p>
+        </article>
+        `;
+    }).join("");
+    featureGrid.innerHTML = cardsHTML;
+};
+
+// ----- Render Navigation using map() -----
+const renderNavigation = () => {
+// Desktop Nav
+if (nav) {
+ const navHTML = navLinks.map(link => {
+ return `
+ <a href="${link.href}" class="nav-link">${link.label}</a>
+ `;}).join("");
+ nav.innerHTML = navHTML;
+ };
+// Mobile Nav
+if (mobileMenu) {
+ const mobileHTML = navLinks.map(link => {
+ return `
+ <a href="${link.href}" class="mobile-link">${link.label}</a>
+ `;}).join("");
+ mobileMenu.innerHTML = mobileHTML;
+ };
 };
 
 // ----- Function Calls -----
-renderFeatures();
+// renderFeatures();
+renderFeaturesMap();
+renderNavigation();
