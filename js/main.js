@@ -75,7 +75,7 @@ if (window.scrollY > 10) {
 } else {
  siteHeader.classList.remove("is-scrolled");
  }
-};
+}; // is-scrolled is in the css file
 // ----- Event Listeners -----
 // 1) Set year on page load
 setCurrentYear();
