@@ -12,6 +12,7 @@ const phoneLink = document.getElementById("phoneLink");
 const heading = document.getElementById("heroHeading");
 const featureGrid = document.getElementById("featureGrid");
 const nav = document.getElementById("nav");
+const siteHeader = document.querySelector(".site-header");
 // ----- Services Data (Array of Objects) -----
 const services = [
  {
@@ -66,7 +67,15 @@ const updateHeadingText = (newText) => {
 if (!heading) return;
 heading.textContent = newText;
 };
-
+// Adds the is-scrolled class to the site-header DOM element
+const handleHeaderOnScroll = () => {
+if (!siteHeader) return;
+if (window.scrollY > 10) {
+ siteHeader.classList.add("is-scrolled");
+} else {
+ siteHeader.classList.remove("is-scrolled");
+ }
+};
 // ----- Event Listeners -----
 // 1) Set year on page load
 setCurrentYear();
@@ -103,6 +112,10 @@ updateHeadingText("Call feature coming next!");
 }
 });
 }
+// 6) Rounds navbar and makes it sticky
+window.addEventListener("scroll", handleHeaderOnScroll);
+// Run once on page load in case user refreshes mid-scroll
+handleHeaderOnScroll();
 
 // ----- Render Features using forEach -----
 // const renderFeatures = () => {
