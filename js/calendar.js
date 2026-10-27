@@ -23,7 +23,7 @@ const bookingMessage = document.getElementById("bookingMessage");
 const today = new Date();
 let currentMonth = today.getMonth();
 let currentYear = today.getFullYear();
-let selectedDate = null;
+let selectedDate = null; // intentionally left blank, given a actual value later
 let selectedTime = "";
 // ----- Time Slot Data -----
 // The shop's hours as lists of bookable times: one list for Mon-Fri, one for Saturday.
@@ -73,9 +73,9 @@ const getMonthName = (monthIndex) => {
   return monthNames[monthIndex];
 };
 const formatDateKey = (year, month, day) => {
-  const safeMonth = String(month + 1).padStart(2, "0");
-  const safeDay = String(day).padStart(2, "0");
-  return `${year}-${safeMonth}-${safeDay}`;
+  const safeMonth = String(month + 1).padStart(2, "0"); // August --> 08
+  const safeDay = String(day).padStart(2, "0"); // 1 ---> 01
+  return `${year}-${safeMonth}-${safeDay}`;  // 2026-08-01
 };
 const formatReadableDate = (year, month, day) => {
   const date = new Date(year, month, day);
