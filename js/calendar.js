@@ -235,10 +235,10 @@ this date.</p>`;
 // ----- Month Navigation (previous / next month buttons) -----
 if (prevMonthBtn) {
   prevMonthBtn.addEventListener("click", () => {
-    currentMonth--;
+    currentMonth--; // decreases the month by one
     if (currentMonth < 0) {
       currentMonth = 11;
-      currentYear--;
+      currentYear--; // decreases year by one
     }
     renderCalendar();
   });
@@ -246,10 +246,10 @@ if (prevMonthBtn) {
 
 if (nextMonthBtn) {
   nextMonthBtn.addEventListener("click", () => {
-    currentMonth++;
+    currentMonth++; // increases the month by one
     if (currentMonth > 11) {
       currentMonth = 0;
-      currentYear++;
+      currentYear++; // increases the year by one
     }
     renderCalendar();
   });
